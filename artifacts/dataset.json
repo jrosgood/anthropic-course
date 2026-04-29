@@ -1,11 +1,48 @@
 [
   {
-    "task": "Write a Python function that extracts the AWS region from an S3 bucket URI in the format 's3://bucket-name/key'. Return 'us-east-1' if no region is explicitly specified."
+    "prompt_inputs": {
+      "height": "178 cm",
+      "weight": "82 kg",
+      "goal": "Maximize muscle gain and strength through proper nutrition timing around weightlifting sessions",
+      "restrictions": "None"
+    },
+    "solution_criteria": [
+      "Meal plan contains at least 4 meals with high protein content (minimum 25g protein per meal) distributed throughout the day",
+      "Includes pre-workout and post-workout nutrition strategically timed around training session",
+      "Plan is presented in compact, easy-to-read format suitable for a single day"
+    ],
+    "task_description": "Write a compact, concise 1 day meal plan for a single athlete",
+    "scenario": "Testing with a strength-focused athlete (weightlifter) emphasizing protein intake and meal timing around workout sessions with recovery nutrition"
   },
   {
-    "task": "Create a JSON CloudFormation template snippet that defines an AWS Lambda function resource with basic properties: FunctionName, Runtime (python3.11), Handler, and Role."
+    "prompt_inputs": {
+      "height": "178 cm",
+      "weight": "71 kg",
+      "goal": "Maintain weight class (71 kg limit) while preparing for competition in 3 days, with adequate energy and strength",
+      "restrictions": "No dairy, no processed foods"
+    },
+    "solution_criteria": [
+      "Meal plan totals approximately 2,200-2,400 calories to maintain weight without excess",
+      "Includes high-protein foods (minimum 140g protein daily) to preserve muscle during weight management",
+      "Incorporates micronutrient-dense foods (leafy greens, lean meats, whole grains) to support performance",
+      "Specifies hydration strategy appropriate for weight class athlete"
+    ],
+    "task_description": "Write a compact, concise 1 day meal plan for a single athlete",
+    "scenario": "Testing with a sport with strict weight management requirements (boxer or wrestler) balancing caloric needs with hydration and micronutrient density while staying within weight class"
   },
   {
-    "task": "Write a regex pattern that matches valid AWS IAM role ARNs in the format 'arn:aws:iam::123456789012:role/RoleName' and captures the account ID and role name separately."
+    "prompt_inputs": {
+      "height": "180 cm",
+      "weight": "72 kg",
+      "goal": "Marathon training with carbohydrate loading for high-intensity endurance performance",
+      "restrictions": "None"
+    },
+    "solution_criteria": [
+      "Meal plan contains exactly 4 meals (breakfast, lunch, dinner, snack) totaling 3000-3500 calories appropriate for marathon training",
+      "Macronutrient ratio maintains 55-60% carbohydrates, 20-25% protein, 15-20% fat to support endurance performance",
+      "All meals are concise and practical to prepare within 1 day"
+    ],
+    "task_description": "Write a compact, concise 1 day meal plan for a single athlete",
+    "scenario": "Testing with a high-intensity endurance athlete (marathon runner) requiring high calorie intake and carbohydrate loading with specific macronutrient ratios"
   }
 ]

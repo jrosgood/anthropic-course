@@ -1,0 +1,51 @@
+[
+  {
+    "prompt_inputs": {
+      "content": "Recent studies demonstrate the complex interplay between carbon pricing mechanisms and economic growth in developing nations. The implementation of cap-and-trade systems has reduced industrial emissions by 15-20% in pilot regions, yet simultaneously increased production costs for energy-intensive sectors. Climate economists argue that carbon taxes provide more predictable incentive structures compared to permit markets, while policy makers in Southeast Asia face pressure to balance climate commitments with competitiveness concerns. Furthermore, the integration of renewable energy infrastructure requires substantial upfront capital investment, creating both technological innovation opportunities and fiscal constraints that disproportionately affect lower-income countries seeking to meet Paris Agreement targets."
+    },
+    "solution_criteria": [
+      "Identifies distinct topics across climate science, economics, and policy domains",
+      "Captures all major subject areas without duplicates",
+      "Returns results as a JSON array of strings"
+    ],
+    "task_description": "Extract topics out of a passage of text from a scholarly article into a JSON array of strings",
+    "scenario": "Testing with interdisciplinary passage containing mixed topics from climate science, economics, and policy - verifies ability to identify distinct topics across different domains"
+  },
+  {
+    "prompt_inputs": {
+      "content": "The study examined metabolic changes in organisms exposed to prolonged darkness, tracking circadian disruption through cortisol measurements and sleep-wake cycle alterations. Participants showed increased glucose intolerance and elevated inflammatory markers, while behavioral observations revealed heightened anxiety responses and social withdrawal. These findings suggest interconnected physiological and psychological consequences of temporal desynchronization, with implications for shift workers and patients with circadian disorders."
+    },
+    "solution_criteria": [
+      "Identifies both explicit topics (circadian disruption, cortisol, sleep-wake cycles, glucose intolerance, inflammatory markers) and implicit underlying themes (metabolic dysfunction, psychological stress, temporal desynchronization)",
+      "Distinguishes between directly mentioned subjects and inferred broader concepts (e.g., inferring 'mental health' or 'stress response' from anxiety and social withdrawal references)",
+      "Returns results as a JSON array of strings"
+    ],
+    "task_description": "Extract topics out of a passage of text from a scholarly article into a JSON array of strings",
+    "scenario": "Testing with a passage where topics are implicit and require inference rather than explicit mentions - assesses whether the prompt can identify underlying themes versus only extracting explicitly stated subjects"
+  },
+  {
+    "prompt_inputs": {
+      "content": "CRISPR-Cas9 systems have revolutionized genome editing by enabling precise modifications of DNA sequences with unprecedented efficiency. Recent advances in NHEJ and HDR pathways have improved the fidelity of double-strand break (DSB) repair, while off-target effects remain a critical concern in therapeutic applications. The development of high-fidelity Cas9 variants, including eSpCas9 and SpCas9-HF1, has significantly reduced unintended mutations at similar loci. Furthermore, base editing technologies such as ABEs and CBEs circumvent DSB formation entirely, offering superior accuracy for point mutations. Integration of CRISPR with TALENs and zinc-finger nucleases (ZFNs) in multiplex screening approaches has enabled genome-wide association studies (GWAS) to identify novel disease-associated variants. Epigenetic modifications through dCas9-based systems targeting histone deacetylases (HDACs) and DNA methyltransferases (DNMTs) demonstrate therapeutic potential in cancer immunotherapy and neurodegenerative disorders."
+    },
+    "solution_criteria": [
+      "Extracts technical terminology and acronyms as distinct topics (e.g., CRISPR-Cas9, NHEJ, HDR, DSB, eSpCas9, ABEs, CBEs, TALENs, ZFNs, GWAS, HDACs, DNMTs)",
+      "Identifies broader conceptual topics beyond acronyms (e.g., genome editing, base editing, epigenetic modifications, off-target effects)",
+      "Returns output as a valid JSON array of strings with no duplicates"
+    ],
+    "task_description": "Extract topics out of a passage of text from a scholarly article into a JSON array of strings",
+    "scenario": "Testing with passage heavy in jargon and acronyms from a specialized field like molecular biology - evaluates whether extraction handles technical terminology and acronym-based topics correctly"
+  },
+  {
+    "prompt_inputs": {
+      "content": "This study examines the role of microbiota in intestinal barrier function, with particular emphasis on tight junction proteins and their regulation by microbial metabolites. The intestinal microbiota produces short-chain fatty acids through fermentation of dietary fiber, which strengthen tight junctions by upregulating claudin and occludin expression. Additionally, microbial-derived butyrate enhances tight junction integrity through histone deacetylase inhibition, while propionate and acetate contribute to barrier function through G-protein coupled receptor signaling. We further investigated how dysbiosis disrupts these microbial-mediated mechanisms, leading to increased intestinal permeability and systemic endotoxemia. Our findings demonstrate that restoring microbial diversity and short-chain fatty acid production reverses barrier dysfunction, suggesting that microbiota-targeted interventions represent a promising therapeutic approach for conditions characterized by compromised intestinal barrier function."
+    },
+    "solution_criteria": [
+      "Output is a valid JSON array of strings containing topic names",
+      "Avoids duplicate topics despite repeated mentions of 'microbiota', 'tight junctions', and 'short-chain fatty acids'",
+      "Maintains appropriate granularity by distinguishing between related but distinct topics (e.g., 'tight junction proteins' vs. 'barrier dysfunction')",
+      "Captures all major topics without over-extraction of synonymous concepts"
+    ],
+    "task_description": "Extract topics out of a passage of text from a scholarly article into a JSON array of strings",
+    "scenario": "Testing with a short, focused passage about a single narrow topic with repeated subtopics - ensures the prompt avoids over-extraction of duplicates and maintains appropriate granularity in the JSON output"
+  }
+]
