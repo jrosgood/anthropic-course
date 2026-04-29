@@ -29,8 +29,9 @@ Then open any notebook in your browser:
 
 | Notebook | Topic |
 |---|---|
-| [1_api_intro.ipynb](1_api_intro.ipynb) | Claude API basics |
-| [2_api_prompt_evaluation.ipynb](2_api_prompt_evaluation.ipynb) | Prompt evaluation techniques |
-| [3_api_prompt_engineering.ipynb](3_api_prompt_engineering.ipynb) | Prompt engineering patterns |
+| [01_api_intro.ipynb](01_api_intro.ipynb) | Claude API basics |
+| [02_api_prompt_evaluation.ipynb](02_api_prompt_evaluation.ipynb) | Prompt evaluation techniques |
+| [03_api_prompt_engineering.ipynb](03_api_prompt_engineering.ipynb) | Prompt engineering patterns |
+| [04_api_tool_use.ipynb](04_api_tool_use.ipynb) | Tool use |
 
 Generated artifacts (datasets, outputs) are saved to the [artifacts/](artifacts/) directory.
