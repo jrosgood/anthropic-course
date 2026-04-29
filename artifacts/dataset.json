@@ -1,0 +1,11 @@
+[
+  {
+    "task": "Write a Python function that extracts the AWS region from an S3 bucket URI in the format 's3://bucket-name/key'. Return 'us-east-1' if no region is explicitly specified."
+  },
+  {
+    "task": "Create a JSON CloudFormation template snippet that defines an AWS Lambda function resource with basic properties: FunctionName, Runtime (python3.11), Handler, and Role."
+  },
+  {
+    "task": "Write a regex pattern that matches valid AWS IAM role ARNs in the format 'arn:aws:iam::123456789012:role/RoleName' and captures the account ID and role name separately."
+  }
+]

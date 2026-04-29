@@ -1,0 +1,17 @@
+[
+  {
+    "task": "Parse an AWS S3 bucket name and object key from an S3 URI in the format 's3://bucket-name/path/to/object'",
+    "format": "regex",
+    "solution_criteria": "A regex pattern that captures the bucket name and object key separately from a valid S3 URI, handling paths with multiple slashes and various valid bucket naming conventions"
+  },
+  {
+    "task": "Create a JSON IAM policy document that allows an AWS principal to read and list objects in a specific S3 bucket",
+    "format": "json",
+    "solution_criteria": "A valid IAM policy JSON with correct Action, Resource, and Effect fields that grants s3:GetObject and s3:ListBucket permissions for a specified bucket ARN"
+  },
+  {
+    "task": "Write a Python function that takes an AWS CloudFormation stack name and returns True if the stack status indicates it was successfully created, False otherwise. Assume the function receives a status string like 'CREATE_COMPLETE' or 'CREATE_FAILED'",
+    "format": "python",
+    "solution_criteria": "A function that checks if the status string contains 'COMPLETE' and does not contain 'FAILED' or 'ROLLBACK', correctly identifying successful CloudFormation stack creation states"
+  }
+]
