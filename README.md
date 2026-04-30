@@ -22,9 +22,18 @@ poetry install
 echo "ANTHROPIC_API_KEY=your_key_here" > .env
 ```
 
-## Local Embeddings (Notebook 05)
+## Notebook 05 — RAG & Hybrid Search
 
-Notebook 05 uses [`microsoft/harrier-oss-v1-0.6b`](https://huggingface.co/microsoft/harrier-oss-v1-0.6b) to generate embeddings locally — no API key, no network calls after first download.
+Notebook 05 builds a full retrieval-augmented generation pipeline from scratch:
+
+- **Text chunking** — character-delimited, sentence-delimited, and section-delimited strategies
+- **Local embeddings** — [`microsoft/harrier-oss-v1-0.6b`](https://huggingface.co/microsoft/harrier-oss-v1-0.6b) runs entirely on-device (no API key, no network calls after first download)
+- **VectorIndex** — cosine and Euclidean similarity search backed by NumPy arrays
+- **BM25Index** — classic lexical search with IDF computed via NumPy
+- **Retriever** — wraps any combination of indexes and fuses their results using Reciprocal Rank Fusion (RRF)
+- **End-to-end RAG** — retrieved context passed to Claude to answer questions grounded in the document
+
+### Local embedding hardware notes
 
 - Default `poetry install` ships **CPU PyTorch**. Embedding all chunks of the sample report takes ~5–15 s on CPU.
 - **NVIDIA GPU upgrade (optional):**
