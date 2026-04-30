@@ -1,14 +1,31 @@
-# Anthropic Course
+# Anthropic Course Companion
 
-Jupyter notebooks exploring the Claude API — covering API basics, prompt evaluation, prompt engineering, tool use, and RAG.
+A working set of Jupyter notebooks that mirror the modules of Anthropic's [**Building with the Claude API**](https://anthropic.skilljar.com/claude-with-the-anthropic-api) course. Each notebook contains the runnable code from the corresponding video module, so you can follow along with the course without pausing to type code from the screen.
 
-> New to Python or Jupyter? Jump to [Newbie Quickstart](#newbie-quickstart) at the bottom of this README.
+Intended for technical *and* non-technical learners — if you can launch Jupyter Lab, you can run every cell.
+
+> New to Python or Jupyter? Jump to [Newbie Quickstart](#newbie-quickstart) at the bottom.
+
+## What's in this repo
+
+Each notebook maps 1:1 to a course module:
+
+| Course module | Notebook | Topics |
+|---|---|---|
+| 2. Accessing Claude with the API | [01_api_intro.ipynb](01_api_intro.ipynb) | Sending your first message; multi-turn chat; system prompts; temperature; streaming; structured output |
+| 3. Prompt Evaluation | [02_api_prompt_evaluation.ipynb](02_api_prompt_evaluation.ipynb) | Generating test datasets with Claude; model-graded and code-graded evaluations; HTML reports |
+| 4. Prompt Engineering | [03_api_prompt_engineering.ipynb](03_api_prompt_engineering.ipynb) | Clarity & specificity; few-shot examples; XML structure; iterative improvement; reusable `PromptEvaluator` class |
+| 5. Tool Use | [04_api_tool_use.ipynb](04_api_tool_use.ipynb) | Defining tool schemas; multi-turn tool loops; multiple tools; web search tool |
+| 6. RAG & Agentic Search | [05_api_rag_and_agentic_search.ipynb](05_api_rag_and_agentic_search.ipynb) | Chunking; local embeddings; vector + BM25 search; Reciprocal Rank Fusion; end-to-end RAG |
+| 7–11. Features, MCP, Agents | — | _Not yet implemented_ |
+
+Sample data, generated reports, and the source document used by the RAG notebook all live in [`artifacts/`](artifacts/).
 
 ## Prerequisites
 
 - Python 3.13 (PyTorch does not yet ship 3.14 wheels)
 - [Poetry](https://python-poetry.org/docs/#installation)
-- An [Anthropic API key](https://console.anthropic.com/)
+- An [Anthropic API key](https://console.anthropic.com/) — needed for any notebook that calls Claude (most of them). The embedding model used in Notebook 05 runs locally and does not need an API key.
 - ~3 GB free disk space (embedding model weights cache to `~/.cache/huggingface/`)
 - Optional: NVIDIA GPU with CUDA 12.x, or Apple Silicon (auto-detected at runtime)
 
@@ -21,6 +38,20 @@ poetry install
 # Create a .env file with your API key
 echo "ANTHROPIC_API_KEY=your_key_here" > .env
 ```
+
+The notebooks load `.env` automatically via `python-dotenv`, so your API key never has to be hard-coded into a cell.
+
+## How to use these notebooks
+
+A guide for first-time users — especially if you're following along with the course videos.
+
+- **One notebook per course module.** Open the notebook listed in the table above next to the module you're watching. Cells are ordered to match the video.
+- **Read before you run.** Markdown cells explain *what* each code block does. Outputs from previous runs are checked into git, so you can preview the results before executing anything.
+- **Run cells with Shift+Enter.** Cells must run top-to-bottom — earlier cells define variables and helper functions that later cells use.
+- **If something breaks**, the fastest fix is **Kernel → Restart Kernel and Clear Outputs of All Cells**, then re-run from the top. This clears stale state without losing the saved code.
+- **Where the data comes from.** Sample datasets, generated reports, and the source document used by the RAG notebook all live in [`artifacts/`](artifacts/). Notebooks read these files with relative paths, so launch Jupyter from the repo root.
+- **API costs.** Most cells make one or two API calls each; running all five notebooks end-to-end on Sonnet 4.6 typically costs well under $1. The exact spend depends on the model you choose — see [Anthropic's pricing page](https://www.anthropic.com/pricing).
+- **You can skip ahead.** Each notebook is self-contained — you can jump straight to Notebook 05 without running 01–04 first. The only state shared across notebooks is the `.env` file and the contents of `artifacts/`.
 
 ## Notebook 05 — RAG & Hybrid Search
 
@@ -50,21 +81,10 @@ Notebook 05 builds a full retrieval-augmented generation pipeline from scratch:
 ## Running the Notebooks
 
 ```bash
-# Launch Jupyter
 poetry run jupyter lab
 ```
 
-Then open any notebook in your browser:
-
-| Notebook | Topic |
-|---|---|
-| [01_api_intro.ipynb](01_api_intro.ipynb) | Claude API basics |
-| [02_api_prompt_evaluation.ipynb](02_api_prompt_evaluation.ipynb) | Prompt evaluation techniques |
-| [03_api_prompt_engineering.ipynb](03_api_prompt_engineering.ipynb) | Prompt engineering patterns |
-| [04_api_tool_use.ipynb](04_api_tool_use.ipynb) | Tool use |
-| [05_api_rag_and_agentic_search.ipynb](05_api_rag_and_agentic_search.ipynb) | RAG & hybrid search: chunking strategies, local embeddings, VectorIndex (cosine/euclidean), BM25 lexical search, Reciprocal Rank Fusion, end-to-end RAG pipeline |
-
-Generated artifacts (datasets, outputs) are saved to the [artifacts/](artifacts/) directory.
+Your browser will open Jupyter Lab automatically. Pick a notebook from the file list on the left and start with the topmost cell.
 
 ---
 
@@ -99,13 +119,13 @@ Step-by-step for a clean machine (Windows / macOS / Linux). If a step looks unfa
    poetry run jupyter lab
    ```
    Your browser will open automatically.
-7. **Open a notebook** — start with [01_api_intro.ipynb](01_api_intro.ipynb), then work your way down.
+7. **Open a notebook** — start with [01_api_intro.ipynb](01_api_intro.ipynb), then work your way down. See [How to use these notebooks](#how-to-use-these-notebooks) for tips on running cells and recovering from errors.
 8. **For Notebook 05 (RAG):** the first time you run the embedding cell, it will appear paused for 1–3 minutes while it downloads the ~1.5 GB embedding model. This only happens once — subsequent runs are instant.
 
 ### Common issues
 
 - **Out of memory** → in Jupyter Lab, click **Kernel → Restart Kernel**.
-- **Notebook 05 is slow on CPU** → use the NVIDIA GPU upgrade command in the [Local Embeddings](#local-embeddings-notebook-05) section above.
+- **Notebook 05 is slow on CPU** → use the NVIDIA GPU upgrade command in the [Notebook 05 hardware notes](#local-embedding-hardware-notes) section above.
 - **`HF_TOKEN` errors** → harrier-oss is a public model; you do not need a Hugging Face account.
 - **`poetry: command not found`** → restart your terminal after installing Poetry, or follow the [Poetry PATH setup docs](https://python-poetry.org/docs/#installation).
 - **Wrong Python version** → run `python3 --version` to confirm 3.13.x. If a different Python is found, run `poetry env use python3.13` from the repo directory before `poetry install`.
