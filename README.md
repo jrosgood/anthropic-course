@@ -53,7 +53,7 @@ Then open any notebook in your browser:
 | [02_api_prompt_evaluation.ipynb](02_api_prompt_evaluation.ipynb) | Prompt evaluation techniques |
 | [03_api_prompt_engineering.ipynb](03_api_prompt_engineering.ipynb) | Prompt engineering patterns |
 | [04_api_tool_use.ipynb](04_api_tool_use.ipynb) | Tool use |
-| [05_api_rag_and_agentic_search.ipynb](05_api_rag_and_agentic_search.ipynb) | RAG: chunking + local embeddings |
+| [05_api_rag_and_agentic_search.ipynb](05_api_rag_and_agentic_search.ipynb) | RAG & hybrid search: chunking strategies, local embeddings, VectorIndex (cosine/euclidean), BM25 lexical search, Reciprocal Rank Fusion, end-to-end RAG pipeline |
 
 Generated artifacts (datasets, outputs) are saved to the [artifacts/](artifacts/) directory.
 
