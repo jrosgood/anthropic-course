@@ -1,10 +1,8 @@
 # Anthropic Course Companion
 
-A working set of Jupyter notebooks that mirror the modules of Anthropic's [**Building with the Claude API**](https://anthropic.skilljar.com/claude-with-the-anthropic-api) course. Each notebook contains the runnable code from the corresponding video module, so you can follow along with the course without pausing to type code from the screen.
+Working notebooks that pair 1:1 with the modules of Anthropic's [**Building with the Claude API**](https://anthropic.skilljar.com/claude-with-the-anthropic-api) course.  Open the notebook for the module you're watching and run the cells alongside the video, instead of pausing every thirty seconds to retype code from the screen.
 
-Intended for technical *and* non-technical learners — if you can launch Jupyter Lab, you can run every cell.
-
-> New to Python or Jupyter? Jump to [Newbie Quickstart](#newbie-quickstart) at the bottom.
+Intended for technical *and* non-technical learners — if you can launch Jupyter Lab, you can run every cell.  If you weren't installing Red Hat Linux 9 on your home computer in high school, jump straight to the [Newbie Quickstart](#newbie-quickstart).
 
 ## What's in this repo
 
@@ -25,7 +23,7 @@ Sample data, generated reports, and the source document used by the RAG notebook
 
 - Python 3.13 (PyTorch does not yet ship 3.14 wheels)
 - [Poetry](https://python-poetry.org/docs/#installation)
-- An [Anthropic API key](https://console.anthropic.com/) — needed for any notebook that calls Claude (most of them). The embedding model used in Notebook 05 runs locally and does not need an API key.
+- An [Anthropic API key](https://console.anthropic.com/) — needed for any notebook that calls Claude (most of them).  The embedding model used in Notebook 05 runs locally and does not need an API key.
 - ~3 GB free disk space (embedding model weights cache to `~/.cache/huggingface/`)
 - Optional: NVIDIA GPU with CUDA 12.x, or Apple Silicon (auto-detected at runtime)
 
@@ -45,34 +43,38 @@ The notebooks load `.env` automatically via `python-dotenv`, so your API key nev
 
 A guide for first-time users — especially if you're following along with the course videos.
 
-- **One notebook per course module.** Open the notebook listed in the table above next to the module you're watching. Cells are ordered to match the video.
-- **Read before you run.** Markdown cells explain *what* each code block does. Outputs from previous runs are checked into git, so you can preview the results before executing anything.
-- **Run cells with Shift+Enter.** Cells must run top-to-bottom — earlier cells define variables and helper functions that later cells use.
-- **If something breaks**, the fastest fix is **Kernel → Restart Kernel and Clear Outputs of All Cells**, then re-run from the top. This clears stale state without losing the saved code.
-- **Where the data comes from.** Sample datasets, generated reports, and the source document used by the RAG notebook all live in [`artifacts/`](artifacts/). Notebooks read these files with relative paths, so launch Jupyter from the repo root.
-- **API costs.** Most cells make one or two API calls each; running all five notebooks end-to-end on Sonnet 4.6 typically costs well under $1. The exact spend depends on the model you choose — see [Anthropic's pricing page](https://www.anthropic.com/pricing).
-- **You can skip ahead.** Each notebook is self-contained — you can jump straight to Notebook 05 without running 01–04 first. The only state shared across notebooks is the `.env` file and the contents of `artifacts/`.
+- **One notebook per course module.**  Open the notebook listed in the table above next to the module you're watching.  Cells are ordered to match the video.
+- **Read before you run.**  Markdown cells explain *what* each code block does.  Outputs from previous runs are checked into git, so you can preview the results before executing anything.
+- **Run cells with Shift+Enter.**  Cells must run top-to-bottom — earlier cells define variables and helper functions that later cells use.
+- **If something breaks**, the fastest fix is **Kernel → Restart Kernel and Clear Outputs of All Cells**, then re-run from the top.  This clears stale state without losing the saved code.
+- **Where the data comes from.**  Sample datasets, generated reports, and the source document used by the RAG notebook all live in [`artifacts/`](artifacts/).  Notebooks read these files with relative paths, so launch Jupyter from the repo root.
+- **API costs.**  Most cells make one or two API calls each; running all five notebooks end-to-end on Sonnet 4.6 typically costs well under $1.  The exact spend depends on the model you choose — see [Anthropic's pricing page](https://www.anthropic.com/pricing).
+- **You can skip ahead.**  Each notebook is self-contained — you can jump straight to Notebook 05 without running 01–04 first.  The only state shared across notebooks is the `.env` file and the contents of `artifacts/`.
 
 ## Notebook 05 — RAG & Hybrid Search
 
-Notebook 05 builds a full retrieval-augmented generation pipeline from scratch:
+Notebook 05 builds a full retrieval-augmented generation pipeline from scratch.  The course recommends VoyageAI — an external embedding service — for this section.  I didn't like the idea of standing up a second paid account just to embed a few thousand chunks for a course exercise, so the notebook installs [`microsoft/harrier-oss-v1-0.6b`](https://huggingface.co/microsoft/harrier-oss-v1-0.6b) and runs the embeddings locally instead.  The model is small but performant, and more than enough for this course.
+
+What you get:
 
 - **Text chunking** — character-delimited, sentence-delimited, and section-delimited strategies
-- **Local embeddings** — [`microsoft/harrier-oss-v1-0.6b`](https://huggingface.co/microsoft/harrier-oss-v1-0.6b) runs entirely on-device (no API key, no network calls after first download)
+- **Local embeddings** — `harrier-oss-v1-0.6b` runs entirely on-device (no API key, no network calls after the first download).  Uses CUDA if it's available, Apple Silicon MPS if you're on an M-series Mac, CPU otherwise.
 - **VectorIndex** — cosine and Euclidean similarity search backed by NumPy arrays
 - **BM25Index** — classic lexical search with IDF computed via NumPy
-- **Retriever** — wraps any combination of indexes and fuses their results using Reciprocal Rank Fusion (RRF)
+- **Retriever** — wraps any combination of indexes and fuses their results using *Reciprocal Rank Fusion* (RRF)
 - **End-to-end RAG** — retrieved context passed to Claude to answer questions grounded in the document
+
+In short: the whole RAG pipeline runs on your laptop with zero external dependencies beyond the Anthropic API key.
 
 ### Local embedding hardware notes
 
-- Default `poetry install` ships **CPU PyTorch**. Embedding all chunks of the sample report takes ~5–15 s on CPU.
+- Default `poetry install` ships **CPU PyTorch**.  Embedding all chunks of the sample report takes ~5–15 s on CPU — fine for this course.
 - **NVIDIA GPU upgrade (optional):**
   ```bash
   poetry run pip install --upgrade torch --index-url https://download.pytorch.org/whl/cu124
   ```
 - **Apple Silicon (M-series):** MPS is auto-detected — no extra steps.
-- **First run downloads ~1.5 GB** for the model. To pre-download outside the notebook:
+- **First run downloads ~1.5 GB** for the model.  To pre-download outside the notebook:
   ```bash
   poetry run huggingface-cli download microsoft/harrier-oss-v1-0.6b
   ```
@@ -84,13 +86,13 @@ Notebook 05 builds a full retrieval-augmented generation pipeline from scratch:
 poetry run jupyter lab
 ```
 
-Your browser will open Jupyter Lab automatically. Pick a notebook from the file list on the left and start with the topmost cell.
+Your browser will open Jupyter Lab automatically.  Pick a notebook from the file list on the left and start with the topmost cell.
 
 ---
 
 ## Newbie Quickstart
 
-Step-by-step for a clean machine (Windows / macOS / Linux). If a step looks unfamiliar, copy-paste the command verbatim into your terminal.
+Step-by-step for a clean machine (Windows / macOS / Linux).  If a step looks unfamiliar, copy-paste the command verbatim into your terminal — that's exactly what it's there for.
 
 1. **Install Python 3.13** (PyTorch does not yet ship 3.14 wheels):
    - Windows: download the [python.org 3.13 installer](https://www.python.org/downloads/) — during install, check **Add Python to PATH**.
@@ -119,8 +121,8 @@ Step-by-step for a clean machine (Windows / macOS / Linux). If a step looks unfa
    poetry run jupyter lab
    ```
    Your browser will open automatically.
-7. **Open a notebook** — start with [01_api_intro.ipynb](01_api_intro.ipynb), then work your way down. See [How to use these notebooks](#how-to-use-these-notebooks) for tips on running cells and recovering from errors.
-8. **For Notebook 05 (RAG):** the first time you run the embedding cell, it will appear paused for 1–3 minutes while it downloads the ~1.5 GB embedding model. This only happens once — subsequent runs are instant.
+7. **Open a notebook** — start with [01_api_intro.ipynb](01_api_intro.ipynb), then work your way down.  See [How to use these notebooks](#how-to-use-these-notebooks) for tips on running cells and recovering from errors.
+8. **For Notebook 05 (RAG):** the first time you run the embedding cell, it will appear paused for 1–3 minutes while it downloads the ~1.5 GB embedding model.  This only happens once — subsequent runs are instant.
 
 ### Common issues
 
@@ -128,4 +130,4 @@ Step-by-step for a clean machine (Windows / macOS / Linux). If a step looks unfa
 - **Notebook 05 is slow on CPU** → use the NVIDIA GPU upgrade command in the [Notebook 05 hardware notes](#local-embedding-hardware-notes) section above.
 - **`HF_TOKEN` errors** → harrier-oss is a public model; you do not need a Hugging Face account.
 - **`poetry: command not found`** → restart your terminal after installing Poetry, or follow the [Poetry PATH setup docs](https://python-poetry.org/docs/#installation).
-- **Wrong Python version** → run `python3 --version` to confirm 3.13.x. If a different Python is found, run `poetry env use python3.13` from the repo directory before `poetry install`.
+- **Wrong Python version** → run `python3 --version` to confirm 3.13.x.  If a different Python is found, run `poetry env use python3.13` from the repo directory before `poetry install`.
