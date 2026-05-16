@@ -14,7 +14,9 @@ dependencies = [
     "sentence-transformers (>=5.4.1,<6.0.0)",
     "torch (>=2.6.0,<3.0.0)",
     "numpy (>=2.1.0,<3.0.0)",
-    "huggingface-hub (>=0.27.0,<1.0.0)"
+    "huggingface-hub (>=0.27.0,<1.0.0)",
+    "uv (>=0.11.14,<0.12.0)",
+    "cli-project"
 ]
 
 
@@ -24,3 +26,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.13,<3.14"
+cli-project = { path = "artifacts/cli_project", develop = true }
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+cli-project = { path = "artifacts/cli_project", editable = true }

@@ -15,7 +15,9 @@ Each notebook maps 1:1 to a course module:
 | 4. Prompt Engineering | [03_api_prompt_engineering.ipynb](03_api_prompt_engineering.ipynb) | Clarity & specificity; few-shot examples; XML structure; iterative improvement; reusable `PromptEvaluator` class |
 | 5. Tool Use | [04_api_tool_use.ipynb](04_api_tool_use.ipynb) | Defining tool schemas; multi-turn tool loops; multiple tools; web search tool |
 | 6. RAG & Agentic Search | [05_api_rag_and_agentic_search.ipynb](05_api_rag_and_agentic_search.ipynb) | Chunking; local embeddings; vector + BM25 search; Reciprocal Rank Fusion; end-to-end RAG |
-| 7–11. Features, MCP, Agents | — | _Not yet implemented_ |
+| 7. API Features of Claude | [06_api_features_of_claude.ipynb](06_api_features_of_claude.ipynb) | Extended thinking; image input; PDF input; document citations; prompt caching with `cache_control`; Files API and the code execution tool |
+| 8. Model Context Protocol | [07_model_context_protocol.ipynb](07_model_context_protocol.ipynb) + [artifacts/cli_project/](artifacts/cli_project/) | FastMCP server with tools, resources, prompts; async stdio MCP client; CLI with `/`-commands and `@`-mentions; testing via `mcp dev` Inspector |
+| 9–11. Agents | — | _Not yet implemented_ |
 
 Sample data, generated reports, and the source document used by the RAG notebook all live in [`artifacts/`](artifacts/).
 
@@ -79,6 +81,20 @@ In short: the whole RAG pipeline runs on your laptop with zero external dependen
   poetry run huggingface-cli download microsoft/harrier-oss-v1-0.6b
   ```
 - To relocate the cache (e.g. small C: drive on Windows): set `HF_HOME=D:\hf-cache` before launching Jupyter.
+
+## Notebook 07 — Model Context Protocol
+
+The MCP module is the structural outlier in this repo.  Every other notebook holds runnable Python; this one is markdown-only.  The implementation — a FastMCP server, an async MCP client, and a CLI that wires them together — lives in [`artifacts/cli_project/`](artifacts/cli_project/) as a real installable Python package, and the notebook is just a guided tour of that code.
+
+Why split it out?  MCP is a multi-process protocol — the client launches the server as a subprocess and talks to it over stdio.  Hosting both sides in a single Jupyter kernel makes the lifecycle awkward; the server has no clean shutdown when a cell errors.  Treating cli_project as a real app side-steps the problem and lets you actually use it.
+
+What's in cli_project:
+
+- **FastMCP server** (`mcp_server.py`) — two tools, two resources, one prompt over a small in-memory document store.  Runs over stdio for Inspector and client compatibility.
+- **Async MCP client** (`mcp_client.py`) — `MCPClient` wraps the SDK's `ClientSession` with an `AsyncExitStack`-based lifecycle and an async context manager.
+- **Interactive CLI** (`core/cli.py`, `core/cli_chat.py`) — `prompt-toolkit`-driven REPL with tab completion for `/`-commands (MCP prompts) and `@`-mentions (MCP resources for document IDs).
+
+In short: the CLI is the artifact, the notebook is the narration.  See [`artifacts/cli_project/README.md`](artifacts/cli_project/README.md) for operational details — running the CLI, adding documents, launching the MCP Inspector with the `poetry -P ../..` invocation.
 
 ## Running the Notebooks
 
