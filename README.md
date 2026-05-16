@@ -2,7 +2,7 @@
 
 Working notebooks that pair 1:1 with the modules of Anthropic's [**Building with the Claude API**](https://anthropic.skilljar.com/claude-with-the-anthropic-api) course.  Open the notebook for the module you're watching and run the cells alongside the video, instead of pausing every thirty seconds to retype code from the screen.
 
-Intended for technical *and* non-technical learners — if you can launch Jupyter Lab, you can run every cell.  If you weren't installing Red Hat Linux 9 on your home computer in high school, jump straight to the [Newbie Quickstart](#newbie-quickstart).
+Intended for technical *and* non-technical learners — if you can launch Jupyter Lab, you can run every cell.  If you aren't the kind of person that was installing Red Hat Linux 9 on your home computer in high school (yes, I'm a nerd), jump straight to the [Newbie Quickstart](#newbie-quickstart).
 
 ## What's in this repo
 
