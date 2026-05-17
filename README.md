@@ -17,7 +17,8 @@ Each notebook maps 1:1 to a course module:
 | 6. RAG & Agentic Search | [05_api_rag_and_agentic_search.ipynb](05_api_rag_and_agentic_search.ipynb) | Chunking; local embeddings; vector + BM25 search; Reciprocal Rank Fusion; end-to-end RAG |
 | 7. API Features of Claude | [06_api_features_of_claude.ipynb](06_api_features_of_claude.ipynb) | Extended thinking; image input; PDF input; document citations; prompt caching with `cache_control`; Files API and the code execution tool |
 | 8. Model Context Protocol | [07_model_context_protocol.ipynb](07_model_context_protocol.ipynb) + [artifacts/cli_project/](artifacts/cli_project/) | FastMCP server with tools, resources, prompts; async stdio MCP client; CLI with `/`-commands and `@`-mentions; testing via `mcp dev` Inspector |
-| 9–11. Agents | — | _Not yet implemented_ |
+| 9. Anthropic Apps — Claude Code and Computer Use | — | _Covered by Anthropic's own docs — see § below_ |
+| 10. Agents and Workflows | [09_agents_and_workflows.ipynb](09_agents_and_workflows.ipynb) | Evaluator-Optimizer loop; Parallelization with `ThreadPoolExecutor`; Chaining with inter-step validation; Routing with classifier + specialist dispatch |
 
 Sample data, generated reports, and the source document used by the RAG notebook all live in [`artifacts/`](artifacts/).
 
@@ -46,11 +47,11 @@ The notebooks load `.env` automatically via `python-dotenv`, so your API key nev
 A guide for first-time users — especially if you're following along with the course videos.
 
 - **One notebook per course module.**  Open the notebook listed in the table above next to the module you're watching.  Cells are ordered to match the video.
-- **Read before you run.**  Markdown cells explain *what* each code block does.  Outputs from previous runs are checked into git, so you can preview the results before executing anything.
+- **Read before you run.**  Markdown cells explain what each code block does.  Outputs from previous runs are checked into git, so you can preview the results before executing anything.
 - **Run cells with Shift+Enter.**  Cells must run top-to-bottom — earlier cells define variables and helper functions that later cells use.
 - **If something breaks**, the fastest fix is **Kernel → Restart Kernel and Clear Outputs of All Cells**, then re-run from the top.  This clears stale state without losing the saved code.
 - **Where the data comes from.**  Sample datasets, generated reports, and the source document used by the RAG notebook all live in [`artifacts/`](artifacts/).  Notebooks read these files with relative paths, so launch Jupyter from the repo root.
-- **API costs.**  Most cells make one or two API calls each; running all five notebooks end-to-end on Sonnet 4.6 typically costs well under $1.  The exact spend depends on the model you choose — see [Anthropic's pricing page](https://www.anthropic.com/pricing).
+- **API costs.**  Most cells make one or two API calls each; running all seven API-calling notebooks (01–06 plus 09 — notebook 07 is markdown-only) end-to-end on Sonnet 4.6 typically costs ~$1–2.  The exact spend depends on the model you choose — see [Anthropic's pricing page](https://www.anthropic.com/pricing).
 - **You can skip ahead.**  Each notebook is self-contained — you can jump straight to Notebook 05 without running 01–04 first.  The only state shared across notebooks is the `.env` file and the contents of `artifacts/`.
 
 ## Notebook 05 — RAG & Hybrid Search
@@ -86,7 +87,7 @@ In short: the whole RAG pipeline runs on your laptop with zero external dependen
 
 The MCP module is the structural outlier in this repo.  Every other notebook holds runnable Python; this one is markdown-only.  The implementation — a FastMCP server, an async MCP client, and a CLI that wires them together — lives in [`artifacts/cli_project/`](artifacts/cli_project/) as a real installable Python package, and the notebook is just a guided tour of that code.
 
-Why split it out?  MCP is a multi-process protocol — the client launches the server as a subprocess and talks to it over stdio.  Hosting both sides in a single Jupyter kernel makes the lifecycle awkward; the server has no clean shutdown when a cell errors.  Treating cli_project as a real app side-steps the problem and lets you actually use it.
+Why split it out?  MCP is a multi-process protocol — the client launches the server as a subprocess and talks to it over standard I/O (stdio).  Hosting both sides in a single Jupyter kernel makes the lifecycle awkward; the server has no clean shutdown when a cell errors.  Treating cli_project as a real app side-steps the problem and lets you actually use it.
 
 What's in cli_project:
 
@@ -96,6 +97,34 @@ What's in cli_project:
 
 In short: the CLI is the artifact, the notebook is the narration.  See [`artifacts/cli_project/README.md`](artifacts/cli_project/README.md) for operational details — running the CLI, adding documents, launching the MCP Inspector with the `poetry -P ../..` invocation.
 
+## Module 9 — Anthropic Apps (Claude Code and Computer Use)
+
+This module covers Claude Code (Anthropic's coding CLI) and the computer use API.  Neither lives in this repo, on purpose.
+
+Claude Code is a standalone CLI you install and run against a real repository — there's nothing meaningful to wrap in a Jupyter cell, and the install + usage walkthrough is already covered well by Anthropic's own documentation.
+
+Computer use *is* programmable through the API, but exercising it safely needs a sandboxed VM or container that can take screenshots and inject mouse/keyboard events.  Setting that up for a learning notebook is more friction than the demo is worth — Anthropic's `computer-use-demo` reference image in their `anthropic-quickstarts` GitHub repo is the right place to start if you want to play with it.
+
+For both, follow the course module through Anthropic's documentation directly.
+
+## Notebook 09 — Agents and Workflows
+
+The agents-and-workflows module is the only coding module that doesn't ship runnable code.  Earlier coding modules all walked through code you could execute; this one walks through the patterns conceptually and stops there.  Notebook 09 supplies the code the course didn't — runnable, cell-by-cell examples tailored to the course's subsections so you can step through each pattern while you watch the videos.
+
+Course subsections implemented with runnable code:
+
+- **Parallelization workflows** — split one complex task into specialized sub-tasks that run concurrently via `ThreadPoolExecutor`, then aggregate the slices into a single decision.  The notebook also runs the sequential equivalent so the wall-clock speedup is something you measure, not something you take on faith.
+- **Chaining workflows** — feed each step's output into the next as a focused, validated handoff (extract → enrich → compose).  A real JSON-schema check sits between steps 1 and 2, so a regression in step 1 stops the chain rather than poisoning steps 2 and 3.
+- **Routing workflows** — a cheap classifier dispatches to one of N specialist prompts, with an explicit `unknown` fallback for out-of-scope requests.
+
+Plus one bonus pattern Anthropic's [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents) article covers alongside the three above:
+
+- **Evaluator-Optimizer** — an optimizer drafts a candidate, an evaluator grades it against a fixed rubric and returns actionable feedback, and the loop runs until the evaluator accepts or a max-iteration cap kicks in.
+
+The course's *Agents and tools*, *Environment inspection*, *Workflows vs agents*, and quiz subsections aren't reproduced as code — they're conceptual or evaluative, and runnable examples wouldn't add anything.
+
+Each pattern's section closes with a *Things to try* checklist — small variations (model swaps, temperature changes, deliberately-broken prompts) that surface *why* the pattern is shaped the way it is.  The point isn't just to copy the pattern; it's to feel where it breaks.
+
 ## Running the Notebooks
 
 ```bash
@@ -103,6 +132,22 @@ poetry run jupyter lab
 ```
 
 Your browser will open Jupyter Lab automatically.  Pick a notebook from the file list on the left and start with the topmost cell.
+
+## Running the Notebooks in VSCode
+
+If you'd rather work in VSCode than browser Jupyter:
+
+1. Open the repo folder in VSCode.  The committed `.vscode/settings.json` already points Python and Pylance at the in-project `.venv`.
+2. Install the **Python** and **Jupyter** extensions from the marketplace if you don't have them.
+3. **Register a Jupyter kernel** that points at the venv's Python.  One-time setup:
+   ```bash
+   poetry run python -m ipykernel install --user --name=anthropic-course --display-name="Python (anthropic-course)"
+   ```
+   This is needed because the stock kernels Jupyter ships with use a bare `python` PATH lookup that VSCode's kernel launcher doesn't resolve cleanly — notebooks otherwise show no selectable kernel.
+4. **Reload the VSCode window** (Cmd/Ctrl+Shift+P → **Developer: Reload Window**) so the Jupyter extension re-scans kernelspecs.
+5. Open a notebook → click the kernel picker in the top-right → **Select Another Kernel...** → **Jupyter Kernel...** → **Python (anthropic-course)**.
+
+Run cells with Shift+Enter as usual.  See [How to use these notebooks](#how-to-use-these-notebooks) for the rest of the workflow.
 
 ---
 
@@ -139,6 +184,7 @@ Step-by-step for a clean machine (Windows / macOS / Linux).  If a step looks unf
    Your browser will open automatically.
 7. **Open a notebook** — start with [01_api_intro.ipynb](01_api_intro.ipynb), then work your way down.  See [How to use these notebooks](#how-to-use-these-notebooks) for tips on running cells and recovering from errors.
 8. **For Notebook 05 (RAG):** the first time you run the embedding cell, it will appear paused for 1–3 minutes while it downloads the ~1.5 GB embedding model.  This only happens once — subsequent runs are instant.
+9. **Prefer VSCode over browser Jupyter?**  See [Running the Notebooks in VSCode](#running-the-notebooks-in-vscode) — one extra step (registering a kernelspec) and you're set.
 
 ### Common issues
 
@@ -147,3 +193,4 @@ Step-by-step for a clean machine (Windows / macOS / Linux).  If a step looks unf
 - **`HF_TOKEN` errors** → harrier-oss is a public model; you do not need a Hugging Face account.
 - **`poetry: command not found`** → restart your terminal after installing Poetry, or follow the [Poetry PATH setup docs](https://python-poetry.org/docs/#installation).
 - **Wrong Python version** → run `python3 --version` to confirm 3.13.x.  If a different Python is found, run `poetry env use python3.13` from the repo directory before `poetry install`.
+- **VSCode: no kernel available in a notebook** → see [Running the Notebooks in VSCode](#running-the-notebooks-in-vscode) — you need the `python -m ipykernel install` step once.  The stock kernels in the venv use a bare `python` argv that VSCode's launcher doesn't resolve.
