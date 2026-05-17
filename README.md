@@ -1,5 +1,7 @@
 # Anthropic Course Companion
 
+> **Unofficial.**  This is a community-built companion to Anthropic's course — not affiliated with, endorsed by, or sponsored by Anthropic.  Just one person working through their course and publishing the code along the way.
+
 Working notebooks that pair 1:1 with the modules of Anthropic's [**Building with the Claude API**](https://anthropic.skilljar.com/claude-with-the-anthropic-api) course.  Open the notebook for the module you're watching and run the cells alongside the video, instead of pausing every thirty seconds to retype code from the screen.
 
 Intended for technical *and* non-technical learners — if you can launch Jupyter Lab, you can run every cell.  If you aren't the kind of person that was installing Red Hat Linux 9 on your home computer in high school (yes, I'm a nerd), jump straight to the [Newbie Quickstart](#newbie-quickstart).
@@ -148,6 +150,12 @@ If you'd rather work in VSCode than browser Jupyter:
 5. Open a notebook → click the kernel picker in the top-right → **Select Another Kernel...** → **Jupyter Kernel...** → **Python (anthropic-course)**.
 
 Run cells with Shift+Enter as usual.  See [How to use these notebooks](#how-to-use-these-notebooks) for the rest of the workflow.
+
+## License and attribution
+
+Joel's original work in this repo — notebooks 01–06 and 09, [`artifacts/cli_project/`](artifacts/cli_project/), and the various test outputs and helper scripts — is licensed under the [MIT license](LICENSE).
+
+A handful of input data files in [`artifacts/`](artifacts/) (a PDF, satellite images, a CSV dataset) originated from Anthropic's course exercises and are kept here for convenience.  Those files are not licensed by me; see [`artifacts/README.md`](artifacts/README.md) for the explicit list.  The full Anthropic course materials are not redistributed — get those from [Anthropic's Skilljar course](https://anthropic.skilljar.com/claude-with-the-anthropic-api) directly.
 
 ---
 
